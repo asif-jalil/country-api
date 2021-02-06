@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+      .card {
+        cursor: pointer;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="container py-5">
+      <!-- <button class="btn btn-primary" onclick="displayDetailsModal(1, 'bang', 'bd')">click</button> -->
+      <div id="country-wrapper" class="row g-4">
+
+      </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      let modalWrap = null;
+
+      async function loadCountry() {
+        const res = await fetch('https://restcountries.eu/rest/v2/all');
+        const data = res.json();
+        return data;
+      }
+
+      loadCountry().then(data => {
+        displayCountry(data);
+      })
+
+      function displayCountry(countryList) {
+        for (let i = 0; i < countryList.length; i++) {
+          const country = countryList[i];
+          const countryName = country.name;
+          const countryCapital = country.capital;
+          const countryFlag = country.flag;
+          const countryLanguage = country.languages[0].name;
+          const countryCode = country.alpha2Code;
+          const countryPopulation = country.population;
+          const countryArea = country.area;
+          const countryCurrencyCode = country.currencies[0].code;
+          const countryCurrencyName = country.currencies[0].name;
+          const countryCurrencySymbol = country.currencies[0].symbol;
+          const countryWrapper = document.getElementById('country-wrapper');
+          const countryDiv = document.createElement('div');
+          countryDiv.setAttribute('class', 'col-3');
+          countryDiv.innerHTML = `
+            <div class="card border-0 text-center h-100 shadow" data-bs-toggle="modal" data-bs-target="#country-${i}">
+              <div class="card-body">
+                <p><img src="${countryFlag}" width="40px"></p>
+                <h5 class="card-title">${countryName}</h5>
+                <p class="card-text">${countryCapital}</p>
+              </div>
+            </div>
+            <div class="modal fade" id="country-${i}">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">${countryName} <span><img src="${countryFlag}" width="25px"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Capital: ${countryCapital}</p>
+                    <p>Country Code: ${countryCode}</p>
+                    <p>Language: ${countryLanguage}</p>
+                    <p>Population: ${countryPopulation}</p>
+                    <p>Area: ${countryArea}</p>
+                    <p>Currency Code: ${countryCurrencyCode}</p>
+                    <p>Currency Name: ${countryCurrencyName}</p>
+                    <p>Currency Symbol: ${countryCurrencySymbol}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          countryWrapper.appendChild(countryDiv);
+        }
+      }
+
+
+      // function displayDetailsModal(id, countryName, countryCode) {
+      //   if (modalWrap !== null) {
+      //     modalWrap.remove()
+      //   }
+      //   modalWrap = document.createElement('div');
+      //   modalWrap.innerHTML = `
+      //     <div class="modal" id="${id}">
+      //       <div class="modal-dialog">
+      //         <div class="modal-content">
+      //           <div class="modal-header">
+      //             <h5 class="modal-title">${countryName}</h5>
+      //             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      //           </div>
+      //           <div class="modal-body">
+      //             <p>Country Code: ${countryCode}</p>
+      //           </div>
+      //           <div class="modal-footer">
+      //             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      //             <button type="button" class="btn btn-primary">Save changes</button>
+      //           </div>
+      //         </div>
+      //       </div>
+      //     </div>
+      // `;
+
+      //   document.body.append(modalWrap);
+      //   const modal = new bootstrap.Modal(modalWrap.querySelector('.modal'));
+      //   modal.show();
+      // }
+
+    </script>
+  </body>
+
+</html>
